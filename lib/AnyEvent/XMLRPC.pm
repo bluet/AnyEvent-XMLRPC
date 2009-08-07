@@ -13,6 +13,8 @@ use Frontier::RPC2;
 
 use base qw(AnyEvent::HTTPD);
 
+=encoding utf8
+
 =head1 NAME
 
 AnyEvent::XMLRPC - Non-Blocking XMLRPC Server. Originally a AnyEvent implementation of Frontier.
