@@ -8,15 +8,14 @@ use common::sense;
 # no warnings;
 
 use encoding 'utf8';
-use Data::Dumper;
+#~ use Data::Dumper;
 use Frontier::RPC2;
-use HTTP::Response;
 
 use base qw(AnyEvent::HTTPD);
 
 =head1 NAME
 
-AnyEvent::XMLRPC - Non-Blocking XMLRPC. Originally a AnyEvent implementation of Frontier.
+AnyEvent::XMLRPC - Non-Blocking XMLRPC Server. Originally a AnyEvent implementation of Frontier.
 
 =head1 VERSION
 
@@ -29,94 +28,94 @@ our $VERSION = '0.01';
 
 =head1 SYNOPSIS
 
-Quick summary of what the module does.
-
-Perhaps a little code snippet.
-
     use AnyEvent::XMLRPC;
 
-    my $foo = AnyEvent::XMLRPC->new();
-    ...
+	my $serv = AnyEvent::XMLRPC->new(
+		methods => {
+			'echo' => \&echo,
+		},
+	);
+or
 
-=head1 EXPORT
+	my $serv = AnyEvent::XMLRPC->new(
+		port	=> 9090,
+		uri	=> "/RPC2",
+		methods => {
+			'echo' => \&echo,
+		},
+	);
 
-A list of functions that can be exported.  You can delete this section
-if you don't export anything, such as for a purely object-oriented module.
+and
+	sub echo {
+		@rep = qw(bala bababa);
+		return \@rep;
+	}
+
+	$serv->run;
+
+=head1 DESCRIPTION
+
+I<AnyEvent::XMLRPC> is a Non-Blocking XMLRPC Server.
+Originally a L<AnyEvent> implementation of L<Frontier>.
+I<AnyEvent::XMLRPC> is base on elmex's L<AnyEvent::HTTPD>.
 
 =head1 FUNCTIONS
 
-=head2 function1
+=head2 new (%options)
 
 =cut
 
-
 sub new {
-	#~ my $class = shift;
-	#~ print Dumper $class;
-	#~ my $self = AnyEvent::HTTPD->new (@_);
-	my $class = shift; my %args = @_;
+	my $class = shift;
+	my %args = @_;
+	
+	$args{'port'} ||= 9090;
+	
+	# extract args which are not for httpd
 	my $methods = delete $args{'methods'};
+	my $uri = delete $args{'uri'};
+	$uri ||= "/RPC2";
+	
+	# get a new clean AnyEvent::HTTPD
 	my $self = $class->SUPER::new(%args);
 	return undef unless $self;
-    
+	
+	# Now I'm AnyEvent::XMLRPC
 	bless $self, $class;
 	
+	
+	# register methods, use Frontier::RPC2 to encode/decode xml
 	${$self}{'methods'} = $methods;
 	${$self}{'decode'} = new Frontier::RPC2 'use_objects' => $args{'use_objects'};
-	#~ ${*$self}{'response'} = new HTTP::Response 200;
-	#~ ${*$self}{'response'}->header('Content-Type' => 'text/xml');
-    
+	
+	
+	# register AnyEvent(::HTTPD) callbacks
 	$self->reg_cb (
-		#~ '/' => sub {
-			#~ my ($httpd, $req) = @_;
-			
-			#~ $req->respond ({ content => ['text/html',
-				#~ "<html><body><h1>Hello World!</h1>"
-				#~ . "<a href=\"/test\">another test page</a>"
-				#~ . "</body></html>"
-			#~ ]});
-		
-			#~ $httpd->stop_request;
-		#~ },
 		'/RPC2' => sub {
 			my ($httpd, $req) = @_;
 			
-			
-			#~ ${*$self}{'response'}->content(
-				#~ ${*$self}{'decode'}->serve(
-					#~ $req->content, ${*$self}{'methods'}
-				#~ )
+			#~ my $reply = ${$self}{'decode'}->serve(
+					#~ $req->content, ${$self}{'methods'}
 			#~ );
-			my $reply = ${$self}{'decode'}->serve(
+			
+			$req->respond ({ content => [
+				'text/xml',
+				${$self}{'decode'}->serve(
 					$req->content, ${$self}{'methods'}
-			);
-			
-			
-			#~ $conn->send_response(${*$self}{'response'});
-			
-			$req->respond ({ content => ['text/xml',
-				$reply
+				)
 			]});
-			
 			
 			$httpd->stop_request;
 		},
-		#~ '' => sub {
-			#~ $req->respond ({ content => ['text/html',
-				#~ "ERROR"
-			#~ ]});
-		#~ },
+		'' => sub {
+			my ($httpd, $req) = @_;
+			$req->respond ({ content => ['text/html',
+				"I'm not something you think I am..."
+			]});
+		},
 	);
 
 	return $self;
-}
-
-
-=head2 function2
-
-=cut
-
-sub function2 {
 }
 
 =head1 AUTHOR
