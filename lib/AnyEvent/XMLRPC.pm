@@ -1,11 +1,22 @@
 package AnyEvent::XMLRPC;
 
-use warnings;
-use strict;
+use common::sense;
+# roughly the same as, with much lower memory usage:
+#
+# use strict qw(vars subs);
+# use feature qw(say state switch);
+# no warnings;
+
+use encoding 'utf8';
+use Data::Dumper;
+use Frontier::RPC2;
+use HTTP::Response;
+
+use base qw(AnyEvent::HTTPD);
 
 =head1 NAME
 
-AnyEvent::XMLRPC - The great new AnyEvent::XMLRPC!
+AnyEvent::XMLRPC - Non-Blocking XMLRPC. Originally a AnyEvent implementation of Frontier.
 
 =head1 VERSION
 
@@ -38,8 +49,68 @@ if you don't export anything, such as for a purely object-oriented module.
 
 =cut
 
-sub function1 {
+
+sub new {
+	#~ my $class = shift;
+	#~ print Dumper $class;
+	#~ my $self = AnyEvent::HTTPD->new (@_);
+	my $class = shift; my %args = @_;
+	my $methods = delete $args{'methods'};
+	my $self = $class->SUPER::new(%args);
+	return undef unless $self;
+    
+	bless $self, $class;
+	
+	${$self}{'methods'} = $methods;
+	${$self}{'decode'} = new Frontier::RPC2 'use_objects' => $args{'use_objects'};
+	#~ ${*$self}{'response'} = new HTTP::Response 200;
+	#~ ${*$self}{'response'}->header('Content-Type' => 'text/xml');
+    
+	$self->reg_cb (
+		#~ '/' => sub {
+			#~ my ($httpd, $req) = @_;
+			
+			#~ $req->respond ({ content => ['text/html',
+				#~ "<html><body><h1>Hello World!</h1>"
+				#~ . "<a href=\"/test\">another test page</a>"
+				#~ . "</body></html>"
+			#~ ]});
+		
+			#~ $httpd->stop_request;
+		#~ },
+		'/RPC2' => sub {
+			my ($httpd, $req) = @_;
+			
+			
+			#~ ${*$self}{'response'}->content(
+				#~ ${*$self}{'decode'}->serve(
+					#~ $req->content, ${*$self}{'methods'}
+				#~ )
+			#~ );
+			my $reply = ${$self}{'decode'}->serve(
+					$req->content, ${$self}{'methods'}
+			);
+			
+			
+			#~ $conn->send_response(${*$self}{'response'});
+			
+			$req->respond ({ content => ['text/xml',
+				$reply
+			]});
+			
+			
+			$httpd->stop_request;
+		},
+		#~ '' => sub {
+			#~ $req->respond ({ content => ['text/html',
+				#~ "ERROR"
+			#~ ]});
+		#~ },
+	);
+
+	return $self;
 }
+
 
 =head2 function2
 

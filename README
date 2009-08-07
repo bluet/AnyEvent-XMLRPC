@@ -1,4 +1,7 @@
-AnyEvent-XMLRPC
+AnyEvent-XMLRPC is a Perl Module.
+Non-Blocking XMLRPC. Originally a AnyEvent implementation of Frontier.
+
+IMPORTANT: This module is still WIP (Work In Progress).
 
 The README is used to introduce the module and provide instructions on
 how to install the module, any machine dependencies it may have (for
