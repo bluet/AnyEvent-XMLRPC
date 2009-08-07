@@ -142,6 +142,10 @@ You can also look for information at:
 
 =over 4
 
+=item * Git repository
+
+L<http://github.com/BlueT/AnyEvent-XMLRPC>
+
 =item * RT: CPAN's request tracker
 
 L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=AnyEvent-XMLRPC>

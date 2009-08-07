@@ -31,6 +31,9 @@ perldoc command.
 
 You can also look for information at:
 
+    Git repository
+        http://github.com/BlueT/AnyEvent-XMLRPC
+    
     RT, CPAN's request tracker
         http://rt.cpan.org/NoAuth/Bugs.html?Dist=AnyEvent-XMLRPC
 
