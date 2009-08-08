@@ -1,16 +1,16 @@
 AnyEvent-XMLRPC is a Perl Module.
 Non-Blocking XMLRPC. Originally a AnyEvent implementation of Frontier.
 
-The README is used to introduce the module and provide instructions on
-how to install the module, any machine dependencies it may have (for
-example C compilers and installed libraries) and any other information
-that should be provided before the module is installed.
+0.03    Sun Aug  9 03:11:32 CST 2009
+        Fix few bugs at the Typhon night.
+        Now have common::sense required in Makefile.PL
 
-A README file is required for CPAN modules since CPAN extracts the README
-file from a module distribution so that people browsing the archive
-can use it to get an idea of the module's uses. It is usually a good idea
-to provide version information here so that people can decide whether
-fixes for the module are worth downloading.
+0.02    Fri Aug  7 17:29:56 CST 2009
+        Fix pod encoding and SYNOPSIS bug.
+
+0.01    Fri Aug  7 11:01:38 CST 2009
+        First version, released on an unsuspecting world.
+
 
 
 INSTALLATION

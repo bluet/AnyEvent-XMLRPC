@@ -6,3 +6,5 @@ lib/AnyEvent/XMLRPC.pm
 t/00-load.t
 t/pod-coverage.t
 t/pod.t
+samples/anyevent-xmlrpc-serv.pl
+samples/frontier-client.pl
