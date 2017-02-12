@@ -1,15 +1,18 @@
 AnyEvent-XMLRPC is a Perl Module.
 Non-Blocking XMLRPC. Originally a AnyEvent implementation of Frontier.
 
-0.03    Sun Aug  9 03:11:32 CST 2009
-        Fix few bugs at the Typhon night.
-        Now have common::sense required in Makefile.PL
+0.04	Sun Feb 12 21:50:24 CST 2017
+	fixed: encoding pragma is no longer supported
 
-0.02    Fri Aug  7 17:29:56 CST 2009
-        Fix pod encoding and SYNOPSIS bug.
+0.03	Sun Aug  9 03:11:32 CST 2009
+	Fix few bugs at the Typhon night.
+	Now have common::sense required in Makefile.PL
 
-0.01    Fri Aug  7 11:01:38 CST 2009
-        First version, released on an unsuspecting world.
+0.02	Fri Aug  7 17:29:56 CST 2009
+	Fix pod encoding and SYNOPSIS bug.
+
+0.01	Fri Aug  7 11:01:38 CST 2009
+	First version, released on an unsuspecting world.
 
 
 
@@ -53,4 +56,3 @@ Copyright (C) 2009 BlueT - Matthew Lien - 練喆明
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
-
