@@ -1,17 +1,28 @@
-use inc::Module::Install;
+use utf8;
+use 5.006;
+use strict;
+use warnings;
+use ExtUtils::MakeMaker;
 
-name     'AnyEvent-XMLRPC';
-all_from 'lib/AnyEvent/XMLRPC.pm';
-author   'BlueT - Matthew Lien - 練喆明 <BlueT@BlueT.org>';
-
-requires 'AnyEvent::HTTPD'	=> 0.6;
-requires 'Frontier::RPC2'	=> 0;
-requires 'common::sense'	=> 0;
-
-
-build_requires 'Test::More';
-
-auto_install;
-
-WriteAll;
-
+WriteMakefile(
+    NAME             => 'AnyEvent::XMLRPC',
+    AUTHOR           => q{BlueT - Matthew Lien - 練喆明 <BlueT@BlueT.org>},
+    VERSION_FROM     => 'lib/AnyEvent/XMLRPC.pm',
+    ABSTRACT_FROM    => 'lib/AnyEvent/XMLRPC.pm',
+    LICENSE          => 'artistic_2',
+    PL_FILES         => {},
+    MIN_PERL_VERSION => 5.006,
+    CONFIGURE_REQUIRES => {
+        'ExtUtils::MakeMaker' => 0,
+    },
+    BUILD_REQUIRES => {
+        'Test::More' => 0,
+    },
+    PREREQ_PM => {
+        'AnyEvent::HTTPD'   => 0.6,
+        'Frontier::RPC2'    => 0,
+        'common::sense'     => 0,
+    },
+    dist  => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
+    clean => { FILES => 'AnyEvent-XMLRPC-*' },
+);

@@ -1,18 +1,3 @@
-package AnyEvent::XMLRPC;
-
-use common::sense;
-# roughly the same as, with much lower memory usage:
-#
-# use strict qw(vars subs);
-# use feature qw(say state switch);
-# no warnings;
-
-use utf8;
-#~ use Data::Dumper;
-use Frontier::RPC2;
-
-use base qw(AnyEvent::HTTPD);
-
 =encoding utf8
 
 =head1 NAME
@@ -23,10 +8,8 @@ AnyEvent::XMLRPC - Non-Blocking XMLRPC Server. Originally a AnyEvent implementat
 
 Version 0.05
 
+
 =cut
-
-our $VERSION = '0.05';
-
 
 =head1 SYNOPSIS
 
@@ -66,60 +49,8 @@ I<AnyEvent::XMLRPC> is base on elmex's L<AnyEvent::HTTPD>.
 
 =head2 new (%options)
 
+
 =cut
-
-sub new {
-	my $class = shift;
-	my %args = @_;
-	
-	$args{'port'} ||= 9090;
-	
-	# extract args which are not for httpd
-	my $methods = delete $args{'methods'};
-	my $uri = delete $args{'uri'};
-	$uri ||= "/RPC2";
-	
-	# get a new clean AnyEvent::HTTPD
-	my $self = $class->SUPER::new(%args);
-	return undef unless $self;
-	
-	# Now I'm AnyEvent::XMLRPC
-	bless $self, $class;
-	
-	
-	# register methods, use Frontier::RPC2 to encode/decode xml
-	${$self}{'methods'} = $methods;
-	${$self}{'decode'} = new Frontier::RPC2 'use_objects' => $args{'use_objects'};
-	
-	
-	# register AnyEvent(::HTTPD) callbacks
-	$self->reg_cb (
-		'/RPC2' => sub {
-			my ($httpd, $req) = @_;
-			
-			#~ my $reply = ${$self}{'decode'}->serve(
-					#~ $req->content, ${$self}{'methods'}
-			#~ );
-			
-			$req->respond ({ content => [
-				'text/xml',
-				${$self}{'decode'}->serve(
-					$req->content, ${$self}{'methods'}
-				)
-			]});
-			
-			$httpd->stop_request;
-		},
-		'' => sub {
-			my ($httpd, $req) = @_;
-			$req->respond ({ content => ['text/html',
-				"I'm not something you think I am..."
-			]});
-		},
-	);
-
-	return $self;
-}
 
 =head1 AUTHOR
 
@@ -179,6 +110,6 @@ This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
 
 
+
 =cut
 
-1; # End of AnyEvent::XMLRPC
