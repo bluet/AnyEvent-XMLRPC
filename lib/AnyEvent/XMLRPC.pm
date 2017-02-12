@@ -7,7 +7,7 @@ use common::sense;
 # use feature qw(say state switch);
 # no warnings;
 
-use encoding 'utf8';
+use utf8;
 #~ use Data::Dumper;
 use Frontier::RPC2;
 
